@@ -62,6 +62,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
                 }
             }
 
+            // TODO: add fluent validation (https://docs.fluentvalidation.net/en/latest/aspnet.html)
             builder.RegisterGeneric(typeof(ValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>)).WithMetadata("Order", -500);
             builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>)).WithMetadata("Order", -100);
             builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>)).WithMetadata("Order", 100);
