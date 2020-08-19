@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.Mediatr;
+using AspNetCoreApi.Infrastructure.Mediation;
 using FluentValidation;
 using FluentValidation.Extensions;
 using Microsoft.AspNetCore.Mvc;
