@@ -17,7 +17,7 @@ steps:
   displayName: Build
   inputs:
     command: 'build'
-    projects: 'AspNetCoreApi.Infrastrure.sln'
+    projects: 'AspNetCoreApi.Infrastructure.sln'
     arguments: '--configuration release'
 - task: BuildQualityChecks@6
   displayName: 'Build Quality Checks'
@@ -29,7 +29,7 @@ steps:
   displayName: Pack
   inputs:
     command: pack
-    packagesToPack: AspNetCoreApi.Infrastrure/AspNetCoreApi.Infrastrure.csproj
+    packagesToPack: AspNetCoreApi.Infrastructure/AspNetCoreApi.Infrastructure.csproj
     configuration: release
     versioningScheme: byBuildNumber
 - task: NuGetCommand@2

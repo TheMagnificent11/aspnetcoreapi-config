@@ -1,6 +1,9 @@
 # AspNetCoreApi.Infrastructure
 Extension methods and Autofac modules to assist with configuration ASP.Net Core API sites.
 
+## Build Status
+[![Build Status](https://saji.visualstudio.com/Open%20Source/_apis/build/status/AspNetCoreApi.Infrastructure?branchName=master)](https://saji.visualstudio.com/Open%20Source/_build/latest?definitionId=42&branchName=master)
+
 ## Dependencies
 
 AspNetCoreApi.Infrastructure is a .Net Standard 2.1 class library that has the following dependencies.
