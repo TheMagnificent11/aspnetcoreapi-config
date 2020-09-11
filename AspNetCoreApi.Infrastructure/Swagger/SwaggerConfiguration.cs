@@ -17,7 +17,7 @@ namespace AspNetCoreApi.Infrastructure.Swagger
         /// <param name="app">Application builder</param>
         /// <param name="apiName">API name</param>
         /// <param name="apiVersions">API versions</param>
-        public static void ConfigureSwagger(this IApplicationBuilder app, string apiName, IList<string> apiVersions)
+        public static void ConfigureSwagger(this IApplicationBuilder app, string apiName, IEnumerable<string> apiVersions)
         {
             app.UseSwagger();
 
@@ -25,7 +25,7 @@ namespace AspNetCoreApi.Infrastructure.Swagger
             {
                 apiVersions
                     .ToList()
-                    .ForEach(version => c.SwaggerEndpoint($"/swagger/{version}/swagger.json", apiName));
+                    .ForEach(version => c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{apiName} {version}"));
             });
         }
 
@@ -50,7 +50,7 @@ namespace AspNetCoreApi.Infrastructure.Swagger
                     .ToList()
                     .ForEach(version =>
                     {
-                        c.SwaggerDoc(version, new OpenApiInfo { Title = apiName, Version = version });
+                        c.SwaggerDoc(version, new OpenApiInfo { Title = $"{apiName} {version}", Version = version });
 
                         if (securityScheme == null || string.IsNullOrWhiteSpace(securitySchemaName))
                             return;

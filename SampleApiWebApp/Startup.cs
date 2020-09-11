@@ -1,40 +1,85 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using AspNetCoreApi.Infrastructure.Exceptions;
+using AspNetCoreApi.Infrastructure.HealthChecks;
+using AspNetCoreApi.Infrastructure.Mediation;
+using AspNetCoreApi.Infrastructure.ProblemDetails;
+using AspNetCoreApi.Infrastructure.Swagger;
+using Autofac;
+using Autofac.Features.Variance;
+using AutoMapper;
+using EntityManagement;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SampleApiWebApp.Data;
 
 namespace SampleApiWebApp
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        private const string ApiName = "Sample API";
+        private const string ApiVersion = "v1";
+
+        private readonly string[] ApiVersions = { ApiVersion };
+
+        private readonly IConfiguration configuration;
+
+        public Startup(IConfiguration configuration)
         {
+            this.configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public static void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterSource(new ContravariantRegistrationSource());
+
+            builder.RegisterModule(new EntityManagementModule<DatabaseContext>());
+            builder.RegisterModule(new MediationModule(new Assembly[] { typeof(Startup).Assembly }));
+        }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapHealthChecks("/health", this.configuration.GetHealthCheckOptions("ApplicationSettings"));
+                endpoints.MapControllers();
             });
+
+            app.ConfigureSwagger(ApiName, this.ApiVersions);
+
+            app.MigrationDatabase<DatabaseContext>();
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDbContextPool<DatabaseContext>(options =>
+                options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
+            services.AddControllers(options => options.Filters.Add(new ExceptionFilter()));
+
+            services.ConfigureProblemDetails();
+
+            services.ConfigureSwagger(ApiVersion, this.ApiVersions);
         }
     }
 }
