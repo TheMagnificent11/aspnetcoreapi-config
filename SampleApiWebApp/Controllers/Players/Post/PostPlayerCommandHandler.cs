@@ -2,9 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AspNetCoreApi.Infrastructure.Mediation;
-using EntityManagement;
 using MediatR;
-using Serilog;
 
 namespace SampleApiWebApp.Controllers.Players.Post
 {

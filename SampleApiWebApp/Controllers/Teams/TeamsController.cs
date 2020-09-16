@@ -28,7 +28,7 @@ namespace SampleApiWebApp.Controllers.Teams
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<IActionResult> Post(
-            [FromBody]PostTeamCommand request,
+            [FromBody] PostTeamCommand request,
             CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
@@ -44,7 +44,7 @@ namespace SampleApiWebApp.Controllers.Teams
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(Team))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetOne([FromRoute]long id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetOne([FromRoute] long id, CancellationToken cancellationToken = default)
         {
             var request = new GetTeamQuery { Id = id };
             var result = await this.Mediator.Send(request, cancellationToken);
@@ -60,8 +60,8 @@ namespace SampleApiWebApp.Controllers.Teams
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Put(
-            [FromRoute]long id,
-            [FromBody]PutTeamCommand request,
+            [FromRoute] long id,
+            [FromBody] PutTeamCommand request,
             CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));

@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityManagement;
-using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.EntityFrameworkCore;
-using MediatR;
-using Serilog;
 using AspNetCoreApi.Infrastructure.Mediation;
+using MediatR;
 
 namespace SampleApiWebApp.Controllers.Teams.Put
 {
