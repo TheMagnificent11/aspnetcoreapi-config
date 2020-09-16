@@ -17,18 +17,16 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// <typeparam name="TEntity">Database entity type</typeparam>
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
-    /// <typeparam name="THandler">Type of handler inheriting <see cref="GetOneQueryHandler{TId, TEntity, TResponseEntity, TRequest, THandler}"/></typeparam>
-    public abstract class GetOneQueryHandler<TId, TEntity, TResponseEntity, TRequest, THandler> :
-        BaseRequestHandler<TId, TEntity, TRequest, OperationResult<TResponseEntity>, THandler>,
+    public abstract class GetOneQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity, TRequest, OperationResult<TResponseEntity>>,
         IRequestHandler<TRequest, OperationResult<TResponseEntity>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TResponseEntity : class
         where TRequest : class, IGetOneQuery<TId, TResponseEntity>
-        where THandler : class, IRequestHandler<TRequest, OperationResult<TResponseEntity>>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetOneQueryHandler{TId, TEntity, TResponseEntity, TRequest, THandler}"/> class
+        /// Initializes a new instance of the <see cref="GetOneQueryHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
         /// </summary>
         /// <param name="databaseContext">Database context</param>
         /// <param name="mapper">Mapper</param>

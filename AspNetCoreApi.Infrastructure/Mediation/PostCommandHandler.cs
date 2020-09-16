@@ -16,20 +16,16 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
-    /// <typeparam name="TRequestEntity">Request entity type</typeparam>
     /// <typeparam name="TRequest">Post request type</typeparam>
-    /// <typeparam name="THandler">Type of handler inheriting <see cref="PostCommandHandler{TId, TEntity, TRequestEntity, TRequest, THandler}"/></typeparam>
-    public abstract class PostCommandHandler<TId, TEntity, TRequestEntity, TRequest, THandler> :
-        BaseRequestHandler<TId, TEntity, TRequest, OperationResult, THandler>,
+    public abstract class PostCommandHandler<TId, TEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity, TRequest, OperationResult<TId>>,
         IRequestHandler<TRequest, OperationResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
-        where TRequestEntity : class
-        where TRequest : class, IPostCommand<TId, TRequestEntity>
-        where THandler : class, IRequestHandler<TRequest, OperationResult>
+        where TRequest : class, IPostCommand<TId>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PostCommandHandler{TId, TEntity, TRequestEntity, TRequest, THandler}"/> class
+        /// Initializes a new instance of the <see cref="PostCommandHandler{TId, TEntity, TRequest}"/> class
         /// </summary>
         /// <param name="databaseContext">Database context</param>
         /// <param name="logger">Logger</param>

@@ -16,22 +16,20 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// <typeparam name="TEntity">Database entity type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
     /// <typeparam name="TResponse">Response type</typeparam>
-    /// <typeparam name="THandler">Type of handler inheriting <see cref="BaseRequestHandler{TId, TEntity, TRequest, TResponse, THandler}"/></typeparam>
-    public abstract class BaseRequestHandler<TId, TEntity, TRequest, TResponse, THandler>
+    public abstract class BaseRequestHandler<TId, TEntity, TRequest, TResponse>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TRequest : class, IRequest<TResponse>
-        where THandler : class, IRequestHandler<TRequest, TResponse>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseRequestHandler{TId, TEntity, TRequest, TResponse, THandler}"/> class
+        /// Initializes a new instance of the <see cref="BaseRequestHandler{TId, TEntity, TRequest, TResponse}"/> class
         /// </summary>
         /// <param name="databaseContext">Database context</param>
         /// <param name="logger">Logger</param>
         protected BaseRequestHandler(IDatabaseContext databaseContext, ILogger logger)
         {
             this.DatabaseContext = databaseContext;
-            this.Logger = logger.ForContext<THandler>();
+            this.Logger = logger.ForContext(this.GetType());
         }
 
         /// <summary>
@@ -59,7 +57,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
 
         internal string GetLoggerTimedOperationName()
         {
-            return $"{typeof(THandler).Name}.Handle";
+            return $"{this.GetType().Name}.Handle";
         }
     }
 }

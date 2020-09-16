@@ -6,11 +6,7 @@ using MediatR;
 
 namespace SampleApiWebApp.Controllers.Players.Post
 {
-    public sealed class PostPlayerCommandHandler : IRequestHandler<PostPlayerCommand, OperationResult>
+    public sealed class PostPlayerCommandHandler
     {
-        public Task<OperationResult> Handle(PostPlayerCommand request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

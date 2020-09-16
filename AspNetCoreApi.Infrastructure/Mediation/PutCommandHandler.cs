@@ -17,17 +17,15 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
     /// <typeparam name="TRequest">Put request type</typeparam>
-    /// <typeparam name="THandler">Type of handler inheriting <see cref="PutCommandHandler{TId, TEntity, TRequest, THandler}"/></typeparam>
-    public abstract class PutCommandHandler<TId, TEntity, TRequest, THandler> :
-        BaseRequestHandler<TId, TEntity, TRequest, OperationResult, THandler>,
+    public abstract class PutCommandHandler<TId, TEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity, TRequest, OperationResult>,
         IRequestHandler<TRequest, OperationResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
         where TEntity : class, IEntity<TId>
         where TRequest : class, IPutCommand<TId>
-        where THandler : class, IRequestHandler<TRequest, OperationResult>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PutCommandHandler{TId, TEntity, TRequest, THandler}"/> class
+        /// Initializes a new instance of the <see cref="PutCommandHandler{TId, TEntity, TRequest}"/> class
         /// </summary>
         /// <param name="databaseContext">Database context</param>
         /// <param name="logger">Logger</param>
