@@ -7,7 +7,6 @@ using AspNetCoreApi.Infrastructure.Mediation;
 using EntityManagement;
 using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SampleApiWebApp.Data.Queries;
 using Serilog;
@@ -26,8 +25,15 @@ namespace SampleApiWebApp.Controllers.Teams.Put
             [NotNull] PutTeamCommand request,
             [NotNull] CancellationToken cancellationToken)
         {
-            if (domainEntity == null) throw new ArgumentNullException(nameof(domainEntity));
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (domainEntity == null)
+            {
+                throw new ArgumentNullException(nameof(domainEntity));
+            }
+
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
             var teamsWithSameName = await this.DatabaseContext
                 .EntitySet<Domain.Team>()

@@ -2,6 +2,8 @@ using System.IO;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace SampleApiWebApp
 {
@@ -10,13 +12,18 @@ namespace SampleApiWebApp
         public static void Main(string[] args)
         {
             var host = Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddSerilog();
+                })
+                .UseSerilog()
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webHostBuilder =>
                 {
                     webHostBuilder
-                      .UseContentRoot(Directory.GetCurrentDirectory())
-                      .UseIISIntegration()
-                      .UseStartup<Startup>();
+                        .UseContentRoot(Directory.GetCurrentDirectory())
+                        .UseStartup<Startup>();
                 })
                 .Build();
 

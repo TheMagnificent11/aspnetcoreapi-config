@@ -24,7 +24,10 @@ namespace SampleApiWebApp.Controllers.Teams.Post
             [NotNull] PostTeamCommand request,
             [NotNull] CancellationToken cancellationToken)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
             var teamName = request.Name.Trim();
 
