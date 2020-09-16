@@ -80,7 +80,7 @@ namespace SampleApiWebApp
 
             services.ConfigureProblemDetails();
 
-            services.ConfigureSwagger(ApiVersion, this.ApiVersions);
+            services.ConfigureSwagger(ApiName, this.ApiVersions);
         }
     }
 }
