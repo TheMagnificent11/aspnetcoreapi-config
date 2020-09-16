@@ -15,27 +15,11 @@ namespace SampleApiWebApp.Controllers.Teams
     [Route("[controller]")]
     public sealed class TeamsController : Controller
     {
+        private readonly IMediator mediator;
+
         public TeamsController(IMediator mediator)
         {
-            this.Mediator = mediator;
-        }
-
-        private IMediator Mediator { get; }
-
-        [HttpPost]
-        [Consumes(ContentTypes.ApplicationJson)]
-        [Produces(ContentTypes.ApplicationJson)]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
-        public async Task<IActionResult> Post(
-            [FromBody] PostTeamCommand request,
-            CancellationToken cancellationToken = default)
-        {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-
-            var result = await this.Mediator.Send(request, cancellationToken);
-
-            return result.ToActionResult();
+            this.mediator = mediator;
         }
 
         [HttpGet]
@@ -47,11 +31,29 @@ namespace SampleApiWebApp.Controllers.Teams
         public async Task<IActionResult> GetOne([FromRoute] long id, CancellationToken cancellationToken = default)
         {
             var request = new GetTeamQuery { Id = id };
-            var result = await this.Mediator.Send(request, cancellationToken);
+            var result = await this.mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();
         }
 
+        [HttpPost]
+        [Consumes(ContentTypes.ApplicationJson)]
+        [Produces(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
+        public async Task<IActionResult> Post(
+            [FromBody] PostTeamCommand request,
+            CancellationToken cancellationToken = default)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var result = await this.mediator.Send(request, cancellationToken);
+
+            return result.ToActionResult();
+        }
         [HttpPut]
         [Route("{id}")]
         [Consumes(ContentTypes.ApplicationJson)]
@@ -64,11 +66,14 @@ namespace SampleApiWebApp.Controllers.Teams
             [FromBody] PutTeamCommand request,
             CancellationToken cancellationToken = default)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
             request.Id = id;
 
-            var result = await this.Mediator.Send(request, cancellationToken);
+            var result = await this.mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();
         }

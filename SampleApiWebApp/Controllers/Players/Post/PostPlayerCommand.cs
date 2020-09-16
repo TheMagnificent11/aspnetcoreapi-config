@@ -4,7 +4,7 @@ using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Controllers.Players.Post
 {
-    public class PostPlayerCommand : IPlayer, IRequest<OperationResult<Player>>
+    public class PostPlayerCommand : IPlayer, IRequest<OperationResult<Player>>, IPostCommand<long>
     {
         public string GivenName { get; set; }
 

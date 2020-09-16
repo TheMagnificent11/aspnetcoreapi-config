@@ -4,7 +4,7 @@ using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Controllers.Teams.Put
 {
-    public sealed class PutTeamCommand : ITeam, IRequest<OperationResult>
+    public sealed class PutTeamCommand : ITeam, IRequest<OperationResult>, IPutCommand<long>
     {
         public long Id { get; set; }
 
