@@ -6,6 +6,7 @@ using FluentValidation;
 using FluentValidation.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AspNetCoreApi.Infrastructure.Exceptions
 {
@@ -41,13 +42,13 @@ namespace AspNetCoreApi.Infrastructure.Exceptions
 
         private static IActionResult HandleValidationException(ValidationException exception)
         {
-            var errors = exception.Errors
+            var modelState = new ModelStateDictionary();
+
+            exception.Errors
                 .ToList()
-                .GetErrors();
+                .ForEach(x => modelState.AddModelError(x.PropertyName, x.ErrorMessage));
 
-            var operationResult = OperationResult.Fail(errors);
-
-            return new BadRequestObjectResult(operationResult.ToProblemDetails());
+            return new BadRequestObjectResult(modelState);
         }
     }
 }
