@@ -27,7 +27,7 @@ namespace SampleApiWebApp
         private const string ApiName = "Sample API";
         private const string ApiVersion = "v1";
 
-        private readonly string[] ApiVersions = { ApiVersion };
+        private readonly string[] apiVersions = { ApiVersion };
 
         private readonly IConfiguration configuration;
 
@@ -68,7 +68,7 @@ namespace SampleApiWebApp
                 endpoints.MapControllers();
             });
 
-            app.ConfigureSwagger(ApiName, this.ApiVersions);
+            app.ConfigureSwagger(ApiName, this.apiVersions);
 
             app.MigrationDatabase<DatabaseContext>();
         }
@@ -94,7 +94,7 @@ namespace SampleApiWebApp
 
             services.ConfigureProblemDetails();
 
-            services.ConfigureSwagger(ApiName, this.ApiVersions);
+            services.ConfigureSwagger(ApiName, this.apiVersions);
         }
     }
 }

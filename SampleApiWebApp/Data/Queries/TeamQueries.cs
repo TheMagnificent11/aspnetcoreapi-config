@@ -18,7 +18,7 @@ namespace SampleApiWebApp.Data.Queries
                 throw new ArgumentNullException(nameof(teamName));
             }
 
-            return teams.Where(x => x.Name.Equals(teamName.Trim(), StringComparison.OrdinalIgnoreCase));
+            return teams.Where(x => x.Name.ToLower().Equals(teamName.Trim().ToLower()));
         }
     }
 }
