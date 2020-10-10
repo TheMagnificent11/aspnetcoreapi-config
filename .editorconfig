@@ -75,5 +75,5 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false:sugges
 csharp_preserve_single_line_statements = false:suggestion
 csharp_preserve_single_line_blocks = true:suggestion
 
-# IDE0063: Use simple 'using' statement
-csharp_prefer_simple_using_statement = true:none
+# CA1034: Nested types should not be visible
+dotnet_diagnostic.CA1034.severity = none
