@@ -11,8 +11,8 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         where TId : IComparable, IComparable<TId>, IEquatable<TId>
     {
         /// <summary>
-        /// Gets or sets the entity ID
+        /// Gets the entity ID
         /// </summary>
-        TId Id { get; set; }
+        TId Id { get; }
     }
 }

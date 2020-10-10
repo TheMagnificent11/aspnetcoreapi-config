@@ -13,8 +13,8 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         where TResponseEntity : class
     {
         /// <summary>
-        /// Gets or sets the ID
+        /// Gets the entity ID
         /// </summary>
-        TId Id { get; set; }
+        TId Id { get; }
     }
 }
