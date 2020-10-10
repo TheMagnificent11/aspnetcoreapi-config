@@ -17,7 +17,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// <typeparam name="TRequest">Request type</typeparam>
     /// <typeparam name="TResponse">Response type</typeparam>
     public abstract class BaseRequestHandler<TId, TEntity, TRequest, TResponse>
-        where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
+        where TId : IComparable, IComparable<TId>, IEquatable<TId>
         where TEntity : class, IEntity<TId>
         where TRequest : class, IRequest<TResponse>
     {

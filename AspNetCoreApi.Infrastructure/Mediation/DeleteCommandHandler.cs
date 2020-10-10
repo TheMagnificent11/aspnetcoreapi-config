@@ -20,7 +20,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     public abstract class DeleteCommandHandler<TId, TEntity, TRequest> :
         BaseRequestHandler<TId, TEntity, TRequest, OperationResult>,
         IRequestHandler<TRequest, OperationResult>
-        where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
+        where TId : IComparable, IComparable<TId>, IEquatable<TId>
         where TEntity : class, IEntity<TId>
         where TRequest : class, IDeleteCommand<TId>
     {

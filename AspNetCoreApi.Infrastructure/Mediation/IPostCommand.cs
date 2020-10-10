@@ -8,7 +8,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// </summary>
     /// <typeparam name="TId">ID type of entity being created</typeparam>
     public interface IPostCommand<TId> : IRequest<OperationResult<TId>>
-        where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
+        where TId : IComparable, IComparable<TId>, IEquatable<TId>
     {
     }
 }
