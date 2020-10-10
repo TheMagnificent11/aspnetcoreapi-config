@@ -20,7 +20,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     public abstract class GetOneQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
         BaseRequestHandler<TId, TEntity, TRequest, OperationResult<TResponseEntity>>,
         IRequestHandler<TRequest, OperationResult<TResponseEntity>>
-        where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
+        where TId : IComparable, IComparable<TId>, IEquatable<TId>
         where TEntity : class, IEntity<TId>
         where TResponseEntity : class
         where TRequest : class, IGetOneQuery<TId, TResponseEntity>

@@ -22,7 +22,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     public abstract class GetAllQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
         BaseRequestHandler<TId, TEntity, TRequest, OperationResult<IEnumerable<TResponseEntity>>>,
         IRequestHandler<TRequest, OperationResult<IEnumerable<TResponseEntity>>>
-        where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
+        where TId : IComparable, IComparable<TId>, IEquatable<TId>
         where TEntity : class, IEntity<TId>
         where TResponseEntity : class
         where TRequest : class, IGetAllQuery<TResponseEntity>

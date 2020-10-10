@@ -8,7 +8,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// </summary>
     /// <typeparam name="TId">Entity ID type</typeparam>
     public interface IPutCommand<TId> : IRequest<OperationResult>
-        where TId : IComparable, IComparable<TId>, IEquatable<TId>, IConvertible
+        where TId : IComparable, IComparable<TId>, IEquatable<TId>
     {
         /// <summary>
         /// Gets or sets the entity ID
