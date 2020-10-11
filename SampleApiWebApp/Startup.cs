@@ -18,7 +18,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SampleApiWebApp.Data;
-using Serilog.Events;
 
 namespace SampleApiWebApp
 {
@@ -77,13 +76,8 @@ namespace SampleApiWebApp
         {
             var appSettings = this.configuration.GetSettings<ApplicationSettings>("ApplicationSettings");
             var seqSettings = this.configuration.GetSettings<SeqSettings>("SeqSettings");
-            var logEventLevel = LogEventLevel.Information;
 
-#if DEBUG
-            logEventLevel = LogEventLevel.Debug;
-#endif
-
-            services.ConfigureLogging(this.configuration, logEventLevel, appSettings, seqSettings);
+            services.ConfigureLogging(appSettings, seqSettings);
 
             services.AddDbContextPool<DatabaseContext>(options =>
                 options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));

@@ -1,10 +1,8 @@
 ﻿using System;
 using AspNetCoreApi.Infrastructure.Settings;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
-using Serilog.Events;
 
 namespace AspNetCoreApi.Infrastructure.Logging
 {
@@ -17,14 +15,10 @@ namespace AspNetCoreApi.Infrastructure.Logging
         /// <see cref="IServiceCollection"/> extension method to configure logging
         /// </summary>
         /// <param name="services">Services collection</param>
-        /// <param name="configuration">Application configuration</param>
-        /// <param name="minimumLevel">Minimum loggging level</param>
         /// <param name="applicationSettings">Application settings</param>
         /// <param name="seqSettings">Seq settings</param>
         public static void ConfigureLogging(
             this IServiceCollection services,
-            IConfiguration configuration,
-            LogEventLevel minimumLevel,
             ApplicationSettings applicationSettings,
             SeqSettings seqSettings)
         {
@@ -45,11 +39,10 @@ namespace AspNetCoreApi.Infrastructure.Logging
 
             var serilogLevelSwitch = new LoggingLevelSwitch
             {
-                MinimumLevel = minimumLevel
+                MinimumLevel = seqSettings.MinimumLogEventLevel
             };
 
             var config = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
                 .MinimumLevel.ControlledBy(serilogLevelSwitch)
                 .WriteTo.Trace()
                 .WriteTo.Console()
