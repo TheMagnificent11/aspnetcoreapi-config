@@ -31,7 +31,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// Initializes a new instance of the <see cref="GetAllQueryHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
         /// </summary>
         /// <param name="databaseContext">Database context</param>
-        /// <param name="mapper"></param>
+        /// <param name="mapper">Mapper</param>
         /// <param name="logger">Logger</param>
         protected GetAllQueryHandler(IDatabaseContext databaseContext, IMapper mapper, ILogger logger)
             : base(databaseContext, logger)

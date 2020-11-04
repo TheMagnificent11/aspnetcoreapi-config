@@ -53,7 +53,9 @@ namespace AspNetCoreApi.Infrastructure.Swagger
                         c.SwaggerDoc(version, new OpenApiInfo { Title = $"{apiName} {version}", Version = version });
 
                         if (securityScheme == null || string.IsNullOrWhiteSpace(securitySchemaName))
+                        {
                             return;
+                        }
 
                         c.AddSecurityDefinition(securitySchemaName, securityScheme);
                     });

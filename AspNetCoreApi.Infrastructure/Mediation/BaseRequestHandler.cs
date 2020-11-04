@@ -28,6 +28,11 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <param name="logger">Logger</param>
         protected BaseRequestHandler(IDatabaseContext databaseContext, ILogger logger)
         {
+            if (logger is null)
+            {
+                throw new ArgumentNullException(nameof(logger));
+            }
+
             this.DatabaseContext = databaseContext;
             this.Logger = logger.ForContext(this.GetType());
         }
@@ -42,6 +47,11 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// </summary>
         protected ILogger Logger { get; }
 
+        internal string GetLoggerTimedOperationName()
+        {
+            return $"{this.GetType().Name}.Handle";
+        }
+
         /// <summary>
         /// Gets a domain entity using an ID-lookup
         /// </summary>
@@ -53,11 +63,6 @@ namespace AspNetCoreApi.Infrastructure.Mediation
             return this.DatabaseContext
                 .EntitySet<TEntity>()
                 .SingleOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
-        }
-
-        internal string GetLoggerTimedOperationName()
-        {
-            return $"{this.GetType().Name}.Handle";
         }
     }
 }

@@ -10,7 +10,10 @@ namespace SampleApiWebApp.Data.Configuration
     {
         public override void Configure(EntityTypeBuilder<Team> builder)
         {
-            if (builder == null) throw new ArgumentNullException(nameof(builder));
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
 
             base.Configure(builder);
 

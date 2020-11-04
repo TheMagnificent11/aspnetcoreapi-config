@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement;
@@ -81,7 +80,7 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>Entity to be created</returns>
         /// <exception cref="ValidationException">Exception thrown when validation errors occur</exception>
         protected abstract Task<TEntity> GenerateAndValidateDomainEntity(
-            [NotNull] TRequest request,
-            [NotNull] CancellationToken cancellationToken);
+            TRequest request,
+            CancellationToken cancellationToken);
     }
 }

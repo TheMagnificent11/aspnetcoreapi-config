@@ -1,10 +1,9 @@
 ﻿using AspNetCoreApi.Infrastructure.Mediation;
-using MediatR;
 using SampleApiWebApp.Domain;
 
 namespace SampleApiWebApp.Controllers.Players.Post
 {
-    public class PostPlayerCommand : IPlayer, IRequest<OperationResult<Player>>, IPostCommand<long>
+    public class PostPlayerCommand : IPlayer, IPostCommand<long>
     {
         public string GivenName { get; set; }
 

@@ -22,7 +22,10 @@ namespace SampleApiWebApp.Domain
             team.ApplyTrackingData();
 
             var errors = ValidateTeam(team);
-            if (errors.Any()) throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
+            if (errors.Any())
+            {
+                throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
+            }
 
             return team;
         }
@@ -41,7 +44,10 @@ namespace SampleApiWebApp.Domain
             this.ApplyTrackingData();
 
             var errors = ValidateTeam(this);
-            if (errors.Any()) throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
+            if (errors.Any())
+            {
+                throw new InvalidOperationException(errors.GetMultiLineErrorMessage());
+            }
         }
 
         public static class FieldMaxLenghts

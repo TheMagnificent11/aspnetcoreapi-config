@@ -18,11 +18,6 @@ namespace AspNetCoreApi.Infrastructure.Settings
         public static T GetSettings<T>(this IConfiguration configuration, string configurationSection)
             where T : class, new()
         {
-            if (configuration is null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
-
             var settings = new T();
 
             configuration.Bind(configurationSection, settings);

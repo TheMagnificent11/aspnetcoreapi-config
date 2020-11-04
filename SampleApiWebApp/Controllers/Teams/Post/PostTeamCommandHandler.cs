@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,8 +20,8 @@ namespace SampleApiWebApp.Controllers.Teams.Post
         }
 
         protected override async Task<Domain.Team> GenerateAndValidateDomainEntity(
-            [NotNull] PostTeamCommand request,
-            [NotNull] CancellationToken cancellationToken)
+            PostTeamCommand request,
+            CancellationToken cancellationToken)
         {
             if (request == null)
             {

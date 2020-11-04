@@ -22,9 +22,15 @@ namespace AspNetCoreApi.Infrastructure.Exceptions
         /// <returns>Asynchronous task</returns>
         public virtual Task OnExceptionAsync(ExceptionContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
-            if (context?.Exception == null) return Task.CompletedTask;
+            if (context?.Exception == null)
+            {
+                return Task.CompletedTask;
+            }
 
             switch (context.Exception)
             {

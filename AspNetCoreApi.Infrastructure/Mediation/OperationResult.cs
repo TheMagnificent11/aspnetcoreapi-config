@@ -61,7 +61,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
         public static OperationResult Fail(IDictionary<string, IEnumerable<string>> errors)
         {
-            if (errors == null) throw new ArgumentNullException(nameof(errors));
+            if (errors == null)
+            {
+                throw new ArgumentNullException(nameof(errors));
+            }
 
             return new OperationResult()
             {
@@ -79,7 +82,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> containing no data</returns>
         public static OperationResult<T> Fail<T>(IDictionary<string, IEnumerable<string>> errors)
         {
-            if (errors == null) throw new ArgumentNullException(nameof(errors));
+            if (errors == null)
+            {
+                throw new ArgumentNullException(nameof(errors));
+            }
 
             return new OperationResult<T>(default(T))
             {
@@ -96,7 +102,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
         public static OperationResult Fail(IEnumerable<ValidationFailure> validationErrors)
         {
-            if (validationErrors == null) throw new ArgumentNullException(nameof(validationErrors));
+            if (validationErrors == null)
+            {
+                throw new ArgumentNullException(nameof(validationErrors));
+            }
 
             return Fail(validationErrors.GetErrors());
         }
@@ -109,7 +118,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> containing no data</returns>
         public static OperationResult<T> Fail<T>(IEnumerable<ValidationFailure> validationErrors)
         {
-            if (validationErrors == null) throw new ArgumentNullException(nameof(validationErrors));
+            if (validationErrors == null)
+            {
+                throw new ArgumentNullException(nameof(validationErrors));
+            }
 
             return Fail<T>(validationErrors.GetErrors());
         }
@@ -121,7 +133,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult"/></returns>
         public static OperationResult Fail(string errorMessage)
         {
-            if (errorMessage == null) throw new ArgumentNullException(nameof(errorMessage));
+            if (errorMessage == null)
+            {
+                throw new ArgumentNullException(nameof(errorMessage));
+            }
 
             var errors = new Dictionary<string, IEnumerable<string>>()
             {
@@ -139,7 +154,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>A <see cref="HttpStatusCode.BadRequest"/> <see cref="OperationResult{T}"/> containing no data</returns>
         public static OperationResult<T> Fail<T>(string errorMessage)
         {
-            if (errorMessage == null) throw new ArgumentNullException(nameof(errorMessage));
+            if (errorMessage == null)
+            {
+                throw new ArgumentNullException(nameof(errorMessage));
+            }
 
             var errors = new Dictionary<string, IEnumerable<string>>()
             {
