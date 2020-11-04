@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNetCoreApi.Infrastructure.Mediation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SampleApiWebApp.Constants;
+using SampleApiWebApp.Controllers.Teams.Delete;
+using SampleApiWebApp.Controllers.Teams.GetAll;
 using SampleApiWebApp.Controllers.Teams.GetOne;
 using SampleApiWebApp.Controllers.Teams.Post;
 using SampleApiWebApp.Controllers.Teams.Put;
@@ -23,7 +26,17 @@ namespace SampleApiWebApp.Controllers.Teams
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Produces(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Team>))]
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
+        {
+            var request = new GetAllQuery();
+            var result = await this.mediator.Send(request, cancellationToken);
+
+            return result.ToActionResult();
+        }
+
+        [HttpGet("{id}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(Team))]
@@ -54,8 +67,8 @@ namespace SampleApiWebApp.Controllers.Teams
 
             return result.ToActionResult();
         }
-        [HttpPut]
-        [Route("{id}")]
+
+        [HttpPut("{id}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
@@ -73,6 +86,19 @@ namespace SampleApiWebApp.Controllers.Teams
 
             request.Id = id;
 
+            var result = await this.mediator.Send(request, cancellationToken);
+
+            return result.ToActionResult();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Delete(
+            [FromRoute] long id,
+            CancellationToken cancellationToken = default)
+        {
+            var request = new DeleteCommand { Id = id };
             var result = await this.mediator.Send(request, cancellationToken);
 
             return result.ToActionResult();

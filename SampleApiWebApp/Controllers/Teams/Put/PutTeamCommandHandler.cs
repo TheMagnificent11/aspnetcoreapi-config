@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,9 +20,9 @@ namespace SampleApiWebApp.Controllers.Teams.Put
         }
 
         protected override async Task BindToDomainEntityAndValidate(
-            [NotNull] Domain.Team domainEntity,
-            [NotNull] PutTeamCommand request,
-            [NotNull] CancellationToken cancellationToken)
+            Domain.Team domainEntity,
+            PutTeamCommand request,
+            CancellationToken cancellationToken)
         {
             if (domainEntity == null)
             {

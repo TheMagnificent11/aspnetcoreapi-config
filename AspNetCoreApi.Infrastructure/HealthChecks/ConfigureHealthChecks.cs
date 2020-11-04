@@ -18,11 +18,6 @@ namespace AspNetCoreApi.Infrastructure.HealthChecks
         /// <returns>Health check options</returns>
         public static HealthCheckOptions GetHealthCheckOptions(this IConfiguration configuration, string applicationSettingsSectionName)
         {
-            if (configuration is null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
-
             if (string.IsNullOrWhiteSpace(applicationSettingsSectionName))
             {
                 throw new ArgumentException($"'{nameof(applicationSettingsSectionName)}' cannot be null or whitespace", nameof(applicationSettingsSectionName));

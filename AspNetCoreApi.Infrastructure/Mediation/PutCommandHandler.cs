@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityManagement;
@@ -83,8 +82,8 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>Asynchronous task</returns>
         /// <exception cref="ValidationException">Exception thrown when validation errors occur</exception>
         protected abstract Task BindToDomainEntityAndValidate(
-            [NotNull] TEntity domainEntity,
-            [NotNull] TRequest request,
-            [NotNull] CancellationToken cancellationToken);
+            TEntity domainEntity,
+            TRequest request,
+            CancellationToken cancellationToken);
     }
 }

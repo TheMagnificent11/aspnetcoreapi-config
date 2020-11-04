@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreApi.Infrastructure.Cors
 {
@@ -11,38 +10,33 @@ namespace AspNetCoreApi.Infrastructure.Cors
     public static class CorsConfiguration
     {
         /// <summary>
-        /// Configures the CORS policy
+        /// Configures CORS policy
         /// </summary>
-        /// <param name="configuration">Configuration</param>
-        /// <param name="policyBuilder">CORS policy builder</param>
-        /// <param name="allowedOriginsSettingName">Name of the application setting that contains allowed origins (if null or empty, then all origins allowed)</param>
-        /// <remarks>
-        /// <paramref name="allowedOriginsSettingName"/> should contain origins separated by a semicolon
-        /// </remarks>
-        public static void ConfigureCorsPolicy(this IConfiguration configuration, CorsPolicyBuilder policyBuilder, string allowedOriginsSettingName)
+        /// <param name="services">Services collection</param>
+        /// <param name="policyName">Policy name</param>
+        /// <param name="allowedOrigins">Semicolon-separated list of allowed origins</param>
+        public static void ConfigureCorsPolicy(this IServiceCollection services, string policyName, string allowedOrigins)
         {
-            if (configuration is null)
+            if (allowedOrigins is null)
             {
-                throw new ArgumentNullException(nameof(configuration));
+                throw new ArgumentNullException(nameof(allowedOrigins));
             }
 
-            if (policyBuilder is null)
+            services.AddCors(o => o.AddPolicy(policyName, policyBuilder =>
             {
-                throw new ArgumentNullException(nameof(policyBuilder));
-            }
+                var origins = allowedOrigins
+                    .Split(';')
+                    .Distinct()
+                    .Where(x => !string.IsNullOrEmpty(x))
+                    .ToArray();
 
-            var origins = (configuration.GetValue<string>(allowedOriginsSettingName) ?? string.Empty)
-                .Split(';')
-                .Distinct()
-                .Where(x => !string.IsNullOrEmpty(x))
-                .ToArray();
+                policyBuilder = origins.Any() ? policyBuilder.WithOrigins(origins) : policyBuilder.AllowAnyOrigin();
 
-            policyBuilder = origins.Any() ? policyBuilder.WithOrigins(origins) : policyBuilder.AllowAnyOrigin();
-
-            policyBuilder
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+                policyBuilder
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            }));
         }
     }
 }

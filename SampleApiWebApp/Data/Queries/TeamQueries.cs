@@ -18,7 +18,9 @@ namespace SampleApiWebApp.Data.Queries
                 throw new ArgumentNullException(nameof(teamName));
             }
 
+#pragma warning disable CA1307 // Specify StringComparison
             return teams.Where(x => x.Name.ToLower().Equals(teamName.Trim().ToLower()));
+#pragma warning restore CA1307 // Specify StringComparison
         }
     }
 }

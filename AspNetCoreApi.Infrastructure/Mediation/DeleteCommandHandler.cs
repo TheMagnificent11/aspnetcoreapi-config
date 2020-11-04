@@ -42,7 +42,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <returns>An <see cref="OperationResult"/> that reports success and any validation errors it was a bad request</returns>
         public async Task<OperationResult> Handle(TRequest request, CancellationToken cancellationToken)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
             using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
             using (LogContext.PushProperty(LoggingProperties.EntityId, request.Id))

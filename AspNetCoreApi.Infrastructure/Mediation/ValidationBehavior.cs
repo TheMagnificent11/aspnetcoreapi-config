@@ -51,7 +51,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
                 .Where(i => i != null)
                 .ToList();
 
-            if (failures.Any()) throw new ValidationException(failures);
+            if (failures.Any())
+            {
+                throw new ValidationException(failures);
+            }
 
             return await next();
         }
