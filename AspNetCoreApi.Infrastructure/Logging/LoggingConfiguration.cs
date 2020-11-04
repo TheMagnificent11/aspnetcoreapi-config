@@ -22,11 +22,6 @@ namespace AspNetCoreApi.Infrastructure.Logging
             ApplicationSettings applicationSettings,
             SeqSettings seqSettings)
         {
-            if (services is null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
-
             if (applicationSettings is null)
             {
                 throw new ArgumentNullException(nameof(applicationSettings));
@@ -67,7 +62,9 @@ namespace AspNetCoreApi.Infrastructure.Logging
 
             Log.Logger = config.CreateLogger();
 
+#pragma warning disable Serilog004 // Constant MessageTemplate verifier
             Log.Logger.Information($"================= {applicationSettings.Name} Started =================");
+#pragma warning restore Serilog004 // Constant MessageTemplate verifier
 
             services.AddLogging(builder => builder.AddSerilog(dispose: true));
         }

@@ -54,6 +54,7 @@ namespace SampleApiWebApp.Controllers.Teams
 
             return result.ToActionResult();
         }
+
         [HttpPut]
         [Route("{id}")]
         [Consumes(ContentTypes.ApplicationJson)]
