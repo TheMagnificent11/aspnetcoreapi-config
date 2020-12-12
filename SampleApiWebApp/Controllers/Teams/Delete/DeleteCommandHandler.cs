@@ -14,7 +14,7 @@ namespace SampleApiWebApp.Controllers.Teams.Delete
 
         protected override void DeleteDomainEntity(DatabaseContext context, Domain.Team domainEntity)
         {
-            context.EntitySet<Domain.Team>().Remove(domainEntity);
+            context.Set<Domain.Team>().Remove(domainEntity);
         }
     }
 }
