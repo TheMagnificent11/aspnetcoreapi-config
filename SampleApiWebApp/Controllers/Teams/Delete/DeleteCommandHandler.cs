@@ -1,19 +1,20 @@
 ﻿using AspNetCoreApi.Infrastructure.Mediation;
-using EntityManagement;
+using Microsoft.EntityFrameworkCore;
+using SampleApiWebApp.Data;
 using Serilog;
 
 namespace SampleApiWebApp.Controllers.Teams.Delete
 {
-    public sealed class DeleteCommandHandler : DeleteCommandHandler<long, Domain.Team, DeleteCommand>
+    public sealed class DeleteCommandHandler : DeleteCommandHandler<long, Domain.Team, DatabaseContext, DeleteCommand>
     {
-        public DeleteCommandHandler(IDatabaseContext databaseContext, ILogger logger)
-            : base(databaseContext, logger)
+        public DeleteCommandHandler(IDbContextFactory<DatabaseContext> contextFactory, ILogger logger)
+            : base(contextFactory, logger)
         {
         }
 
-        protected override void DeleteDomainEntity(Domain.Team domainEntity)
+        protected override void DeleteDomainEntity(DatabaseContext context, Domain.Team domainEntity)
         {
-            this.DatabaseContext.EntitySet<Domain.Team>().Remove(domainEntity);
+            context.EntitySet<Domain.Team>().Remove(domainEntity);
         }
     }
 }

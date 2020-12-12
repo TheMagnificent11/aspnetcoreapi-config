@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using EntityManagement;
 using EntityManagement.Core;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Context;
 
@@ -15,24 +15,26 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
+    /// <typeparam name="TContext">Datbase context type</typeparam>
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
-    public abstract class GetOneQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
-        BaseRequestHandler<TId, TEntity, TRequest, OperationResult<TResponseEntity>>,
+    public abstract class GetOneQueryHandler<TId, TEntity, TContext, TResponseEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity, TContext, TRequest, OperationResult<TResponseEntity>>,
         IRequestHandler<TRequest, OperationResult<TResponseEntity>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>
         where TEntity : class, IEntity<TId>
+        where TContext : DbContext
         where TResponseEntity : class
         where TRequest : class, IGetOneQuery<TId, TResponseEntity>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetOneQueryHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="GetOneQueryHandler{TId, TEntity, TContext, TResponseEntity, TRequest}"/> class
         /// </summary>
-        /// <param name="databaseContext">Database context</param>
+        /// <param name="contextFactory">Database context factory</param>
         /// <param name="mapper">Mapper</param>
         /// <param name="logger">Logger</param>
-        protected GetOneQueryHandler(IDatabaseContext databaseContext, IMapper mapper, ILogger logger)
-            : base(databaseContext, logger)
+        protected GetOneQueryHandler(IDbContextFactory<TContext> contextFactory, IMapper mapper, ILogger logger)
+            : base(contextFactory, logger)
         {
             this.Mapper = mapper;
         }
@@ -63,8 +65,9 @@ namespace AspNetCoreApi.Infrastructure.Mediation
             using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
             using (LogContext.PushProperty(LoggingProperties.EntityId, request.Id))
             using (this.Logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
+            using (var context = this.DatabaseContextFactory.CreateDbContext())
             {
-                var entity = await this.GetById(request.Id, cancellationToken);
+                var entity = await GetById(context, request.Id, cancellationToken);
                 if (entity == null)
                 {
                     return OperationResult.NotFound<TResponseEntity>();
