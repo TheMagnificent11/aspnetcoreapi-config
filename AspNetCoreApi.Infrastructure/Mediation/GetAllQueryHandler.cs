@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using EntityManagement;
 using EntityManagement.Core;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,24 +16,26 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
+    /// <typeparam name="TContext">Datbase context type</typeparam>
     /// <typeparam name="TResponseEntity">Entity response type</typeparam>
     /// <typeparam name="TRequest">Request type</typeparam>
-    public abstract class GetAllQueryHandler<TId, TEntity, TResponseEntity, TRequest> :
-        BaseRequestHandler<TId, TEntity, TRequest, OperationResult<IEnumerable<TResponseEntity>>>,
+    public abstract class GetAllQueryHandler<TId, TEntity, TContext, TResponseEntity, TRequest> :
+        BaseRequestHandler<TId, TEntity, TContext, TRequest, OperationResult<IEnumerable<TResponseEntity>>>,
         IRequestHandler<TRequest, OperationResult<IEnumerable<TResponseEntity>>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>
         where TEntity : class, IEntity<TId>
+        where TContext : DbContext
         where TResponseEntity : class
         where TRequest : class, IGetAllQuery<TResponseEntity>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetAllQueryHandler{TId, TEntity, TResponseEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="GetAllQueryHandler{TId, TEntity, TContext, TResponseEntity, TRequest}"/> class
         /// </summary>
-        /// <param name="databaseContext">Database context</param>
+        /// <param name="contextFactory">Database context factory</param>
         /// <param name="mapper">Mapper</param>
         /// <param name="logger">Logger</param>
-        protected GetAllQueryHandler(IDatabaseContext databaseContext, IMapper mapper, ILogger logger)
-            : base(databaseContext, logger)
+        protected GetAllQueryHandler(IDbContextFactory<TContext> contextFactory, IMapper mapper, ILogger logger)
+            : base(contextFactory, logger)
         {
             this.Mapper = mapper;
         }
@@ -61,9 +62,10 @@ namespace AspNetCoreApi.Infrastructure.Mediation
 
             using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
             using (this.Logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
+            using (var context = this.DatabaseContextFactory.CreateDbContext())
             {
-                var domainEntities = await this.DatabaseContext
-                    .EntitySet<TEntity>()
+                var domainEntities = await context
+                    .Set<TEntity>()
                     .ToArrayAsync(cancellationToken);
 
                 var responseEntities = this.Mapper.Map<IEnumerable<TResponseEntity>>(domainEntities);

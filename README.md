@@ -2,7 +2,7 @@
 Extension methods and Autofac modules to assist with configuration ASP.Net Core API sites.
 
 ## Build Status
-[![Build Status](https://saji.visualstudio.com/Open%20Source/_apis/build/status/AspNetCoreApi.Infrastructure?branchName=master)](https://saji.visualstudio.com/Open%20Source/_build/latest?definitionId=42&branchName=master)
+![.NET Core](https://github.com/TheMagnificent11/aspnetcoreapi-infrastructure/workflows/.NET%20Core/badge.svg)
 
 ## Dependencies
 
