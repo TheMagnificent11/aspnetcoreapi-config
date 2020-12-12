@@ -61,8 +61,7 @@ namespace SampleApiWebApp
 
             app.UseEndpoints(endpoints =>
             {
-                // TOOD: fix this
-                // endpoints.MapHealthChecks("/health", this.configuration.GetHealthCheckOptions("ApplicationSettings"));
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });
 
