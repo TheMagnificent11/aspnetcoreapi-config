@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityManagement;
 using EntityManagement.Core;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Context;
 
@@ -15,21 +15,23 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
+    /// <typeparam name="TContext">Datbase context type</typeparam>
     /// <typeparam name="TRequest">Post request type</typeparam>
-    public abstract class PostCommandHandler<TId, TEntity, TRequest> :
-        BaseRequestHandler<TId, TEntity, TRequest, OperationResult<TId>>,
+    public abstract class PostCommandHandler<TId, TEntity, TContext, TRequest> :
+        BaseRequestHandler<TId, TEntity, TContext, TRequest, OperationResult<TId>>,
         IRequestHandler<TRequest, OperationResult<TId>>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>
         where TEntity : class, IEntity<TId>
+        where TContext : DbContext
         where TRequest : class, IPostCommand<TId>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PostCommandHandler{TId, TEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="PostCommandHandler{TId, TEntity, TContext, TRequest}"/> class
         /// </summary>
-        /// <param name="databaseContext">Database context</param>
+        /// <param name="contextFactory">Database context factory</param>
         /// <param name="logger">Logger</param>
-        protected PostCommandHandler(IDatabaseContext databaseContext, ILogger logger)
-            : base(databaseContext, logger)
+        protected PostCommandHandler(IDbContextFactory<TContext> contextFactory, ILogger logger)
+            : base(contextFactory, logger)
         {
         }
 
@@ -51,16 +53,15 @@ namespace AspNetCoreApi.Infrastructure.Mediation
 
             using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
             using (this.Logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
+            using (var context = this.DatabaseContextFactory.CreateDbContext())
             {
                 try
                 {
-                    var entity = await this.GenerateAndValidateDomainEntity(request, cancellationToken);
+                    var entity = await this.GenerateAndValidateDomainEntity(context, request, cancellationToken);
 
-                    this.DatabaseContext
-                        .EntitySet<TEntity>()
-                        .Add(entity);
+                    context.Set<TEntity>().Add(entity);
 
-                    await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+                    await context.SaveChangesAsync(cancellationToken);
 
                     return OperationResult.Success(entity.Id);
                 }
@@ -75,11 +76,13 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <summary>
         /// Generate a domain entity from create entity request
         /// </summary>
+        /// <param name="context">Database context</param>
         /// <param name="request">Create entity request</param>
         /// <param name="cancellationToken">Canellation token</param>
         /// <returns>Entity to be created</returns>
         /// <exception cref="ValidationException">Exception thrown when validation errors occur</exception>
         protected abstract Task<TEntity> GenerateAndValidateDomainEntity(
+            TContext context,
             TRequest request,
             CancellationToken cancellationToken);
     }

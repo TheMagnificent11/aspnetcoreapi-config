@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityManagement;
 using EntityManagement.Core;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Context;
 
@@ -16,21 +16,23 @@ namespace AspNetCoreApi.Infrastructure.Mediation
     /// </summary>
     /// <typeparam name="TId">Database entity ID type</typeparam>
     /// <typeparam name="TEntity">Database entity type</typeparam>
+    /// <typeparam name="TContext">Datbase context type</typeparam>
     /// <typeparam name="TRequest">Delete command type</typeparam>
-    public abstract class DeleteCommandHandler<TId, TEntity, TRequest> :
-        BaseRequestHandler<TId, TEntity, TRequest, OperationResult>,
+    public abstract class DeleteCommandHandler<TId, TEntity, TContext, TRequest> :
+        BaseRequestHandler<TId, TEntity, TContext, TRequest, OperationResult>,
         IRequestHandler<TRequest, OperationResult>
         where TId : IComparable, IComparable<TId>, IEquatable<TId>
         where TEntity : class, IEntity<TId>
+        where TContext : DbContext
         where TRequest : class, IDeleteCommand<TId>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteCommandHandler{TId, TEntity, TRequest}"/> class
+        /// Initializes a new instance of the <see cref="DeleteCommandHandler{TId, TEntity, TContext, TRequest}"/> class
         /// </summary>
-        /// <param name="databaseContext">Database context</param>
+        /// <param name="contextFactory">Database context factory</param>
         /// <param name="logger">Logger</param>
-        protected DeleteCommandHandler(IDatabaseContext databaseContext, ILogger logger)
-            : base(databaseContext, logger)
+        protected DeleteCommandHandler(IDbContextFactory<TContext> contextFactory, ILogger logger)
+            : base(contextFactory, logger)
         {
         }
 
@@ -50,8 +52,9 @@ namespace AspNetCoreApi.Infrastructure.Mediation
             using (LogContext.PushProperty(LoggingProperties.EntityType, typeof(TEntity).Name))
             using (LogContext.PushProperty(LoggingProperties.EntityId, request.Id))
             using (this.Logger.BeginTimedOperation(this.GetLoggerTimedOperationName()))
+            using (var context = this.DatabaseContextFactory.CreateDbContext())
             {
-                var domainEntity = await this.GetById(request.Id, cancellationToken);
+                var domainEntity = await GetById(context, request.Id, cancellationToken);
 
                 if (domainEntity == null)
                 {
@@ -65,9 +68,9 @@ namespace AspNetCoreApi.Infrastructure.Mediation
                     return OperationResult.Fail(validationErrors);
                 }
 
-                this.DeleteDomainEntity(domainEntity);
+                this.DeleteDomainEntity(context, domainEntity);
 
-                await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+                await context.SaveChangesAsync(cancellationToken);
 
                 return OperationResult.Success();
             }
@@ -94,10 +97,11 @@ namespace AspNetCoreApi.Infrastructure.Mediation
         /// <summary>
         /// Executes the delete operation
         /// </summary>
+        /// <param name="context">Databae context</param>
         /// <param name="domainEntity">Domain eneity to delete</param>
         /// <remarks>
         /// If <paramref name="domainEntity"/> implemnets <see cref="ISoftDeleteEntity"/>, then here would be the place to call the domain method to soft-delete the entity
         /// </remarks>
-        protected abstract void DeleteDomainEntity(TEntity domainEntity);
+        protected abstract void DeleteDomainEntity(TContext context, TEntity domainEntity);
     }
 }

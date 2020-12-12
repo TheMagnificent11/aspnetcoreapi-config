@@ -1,6 +1,5 @@
 using System.Reflection;
 using AspNetCoreApi.Infrastructure.Exceptions;
-using AspNetCoreApi.Infrastructure.HealthChecks;
 using AspNetCoreApi.Infrastructure.Logging;
 using AspNetCoreApi.Infrastructure.Mediation;
 using AspNetCoreApi.Infrastructure.ProblemDetails;
@@ -11,6 +10,7 @@ using Autofac.Features.Variance;
 using AutofacSerilogIntegration;
 using AutoMapper;
 using EntityManagement;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +39,6 @@ namespace SampleApiWebApp
         {
             builder.RegisterLogger();
             builder.RegisterSource(new ContravariantRegistrationSource());
-            builder.RegisterModule(new EntityManagementModule<DatabaseContext>());
             builder.RegisterModule(new MediationModule(new Assembly[] { typeof(Startup).Assembly }));
         }
 
@@ -79,16 +78,20 @@ namespace SampleApiWebApp
 
             services.ConfigureLogging(appSettings, seqSettings);
 
-            services.AddDbContextPool<DatabaseContext>(options =>
-                options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+            services.ConfigureDatabaseContextAndFactory<DatabaseContext>(
+                this.configuration.GetConnectionString("DefaultConnection"));
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
-            services.AddControllers(options => options.Filters.Add(new ExceptionFilter()));
+            services.AddControllers(options => options.Filters.Add(new ExceptionFilter()))
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
 
             services.ConfigureProblemDetails();
 
             services.ConfigureSwagger(ApiName, this.apiVersions);
+
+            services.AddHealthChecks()
+                .AddDbContextCheck<DatabaseContext>();
         }
     }
 }

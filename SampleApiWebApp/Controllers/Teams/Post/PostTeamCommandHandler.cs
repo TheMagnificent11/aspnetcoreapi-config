@@ -3,26 +3,32 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNetCoreApi.Infrastructure.Mediation;
-using EntityManagement;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using SampleApiWebApp.Data;
 using SampleApiWebApp.Data.Queries;
 using Serilog;
 
 namespace SampleApiWebApp.Controllers.Teams.Post
 {
-    public sealed class PostTeamCommandHandler : PostCommandHandler<long, Domain.Team, PostTeamCommand>
+    public sealed class PostTeamCommandHandler : PostCommandHandler<long, Domain.Team, DatabaseContext, PostTeamCommand>
     {
-        public PostTeamCommandHandler(IDatabaseContext databaseContext, ILogger logger)
-            : base(databaseContext, logger)
+        public PostTeamCommandHandler(IDbContextFactory<DatabaseContext> contextFactory, ILogger logger)
+            : base(contextFactory, logger)
         {
         }
 
         protected override async Task<Domain.Team> GenerateAndValidateDomainEntity(
+            DatabaseContext context,
             PostTeamCommand request,
             CancellationToken cancellationToken)
         {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
@@ -30,8 +36,8 @@ namespace SampleApiWebApp.Controllers.Teams.Post
 
             var teamName = request.Name.Trim();
 
-            var teamsWithSameName = await this.DatabaseContext
-                .EntitySet<Domain.Team>()
+            var teamsWithSameName = await context
+                .Set<Domain.Team>()
                 .GetTeamsByName(request.Name)
                 .ToArrayAsync(cancellationToken);
 
