@@ -11,6 +11,7 @@ using AutofacSerilogIntegration;
 using EntityManagement;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Sample.Application.Teams;
 using Sample.Data;
 
 namespace Sample.Api;
@@ -33,7 +34,7 @@ public class Startup
     {
         builder.RegisterLogger();
         builder.RegisterSource(new ContravariantRegistrationSource());
-        builder.RegisterModule(new MediationModule(new Assembly[] { typeof(Startup).Assembly }));
+        builder.RegisterModule(new MediationModule(new Assembly[] { typeof(TeamMappings).Assembly }));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -72,7 +73,7 @@ public class Startup
         services.ConfigureDatabaseContextAndFactory<DatabaseContext>(
             this.configuration.GetConnectionString("DefaultConnection"));
 
-        services.AddAutoMapper(typeof(Startup).Assembly);
+        services.AddAutoMapper(typeof(TeamMappings).Assembly);
 
         services.AddControllers(options => options.Filters.Add(new ExceptionFilter()))
             .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
