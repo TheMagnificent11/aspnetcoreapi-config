@@ -7,29 +7,20 @@ namespace Sample.Domain;
 
 public class Team : BaseEntity<Guid>, ITeam
 {
-    private readonly List<Player> players;
-
-    public Team(string name)
-    {
-        if (name is null)
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
-
-        this.players = new List<Player>();
-
-        this.Id = Guid.NewGuid();
-        this.Name = name;
-        this.Players = this.players;
-    }
+    private readonly List<Player> players = new ();
 
     public string Name { get; protected set; }
 
-    public IReadOnlyCollection<Player> Players { get; protected set; }
+    public IReadOnlyCollection<Player> Players => this.players;
 
     public static Team CreateTeam(string teamName)
     {
-        var team = new Team(teamName);
+        if (teamName is null)
+        {
+            throw new ArgumentNullException(nameof(teamName));
+        }
+
+        var team = new Team { Id = Guid.NewGuid(), Name = teamName };
 
         team.ApplyTrackingData();
 

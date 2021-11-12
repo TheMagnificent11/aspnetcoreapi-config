@@ -6,15 +6,6 @@ namespace Sample.Domain;
 
 public class Player : BaseEntity<Guid>, IPlayer
 {
-    private Player(string givenName, string surname, Team team, int number)
-    {
-        this.GivenName = givenName;
-        this.Surname = surname;
-        this.Team = team;
-        this.TeamId = team.Id;
-        this.Number = number;
-    }
-
     public string GivenName { get; protected set; }
 
     public string Surname { get; protected set; }
@@ -59,7 +50,14 @@ public class Player : BaseEntity<Guid>, IPlayer
             throw new ArgumentNullException(nameof(team));
         }
 
-        var player = new Player(givenName, surname, team, number);
+        var player = new Player
+        {
+            GivenName = givenName,
+            Surname = surname,
+            Team = team,
+            TeamId = team.Id,
+            Number = number,
+        };
 
         Validate(player);
 
