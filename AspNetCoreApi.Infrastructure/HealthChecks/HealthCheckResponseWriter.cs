@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AspNetCoreApi.Infrastructure.Settings;
 using Microsoft.AspNetCore.Http;
@@ -59,7 +60,7 @@ namespace AspNetCoreApi.Infrastructure.HealthChecks
 
             var jsonOptions = new JsonSerializerOptions
             {
-                IgnoreNullValues = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 WriteIndented = true
             };
 
