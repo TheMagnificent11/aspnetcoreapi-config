@@ -2,6 +2,6 @@
 
 namespace Sample.Application.Teams.GetAll;
 
-public class GetAllQuery : IGetAllQuery<Team>
+public class GetAllTeamsQuery : IGetAllQuery<Team>
 {
 }

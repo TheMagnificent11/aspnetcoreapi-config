@@ -1,0 +1,36 @@
+﻿@page "/teams"
+
+<PageTitle>Teams</PageTitle>
+
+@if (this.Data == null)
+{
+    if (this.PageErrors.Any())
+    {
+        foreach (var item in this.PageErrors)
+        {
+            <p>@item</p>
+        }
+    }
+    else
+    {
+        <p><em>Loading...</em></p>
+    }
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in this.Data)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -28,7 +28,7 @@ public sealed class TeamsController : Controller
     [ProducesResponseType(200, Type = typeof(IEnumerable<Team>))]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
-        var request = new GetAllQuery();
+        var request = new GetAllTeamsQuery();
         var result = await this.mediator.Send(request, cancellationToken);
 
         return result.ToActionResult();

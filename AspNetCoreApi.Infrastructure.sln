@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApi.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Api", "Sample.Api\Sample.Api.csproj", "{D9FE9DB1-8AD0-49ED-B677-2D02797826B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.BlazorServer", "Sample.BlazorServer\Sample.BlazorServer.csproj", "{52436587-FB36-4695-A9B2-03678F787ED7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,18 @@ Global
 		{D9FE9DB1-8AD0-49ED-B677-2D02797826B4}.Release|x64.Build.0 = Release|Any CPU
 		{D9FE9DB1-8AD0-49ED-B677-2D02797826B4}.Release|x86.ActiveCfg = Release|Any CPU
 		{D9FE9DB1-8AD0-49ED-B677-2D02797826B4}.Release|x86.Build.0 = Release|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Debug|x64.Build.0 = Debug|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Debug|x86.Build.0 = Debug|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Release|x64.ActiveCfg = Release|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Release|x64.Build.0 = Release|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Release|x86.ActiveCfg = Release|Any CPU
+		{52436587-FB36-4695-A9B2-03678F787ED7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

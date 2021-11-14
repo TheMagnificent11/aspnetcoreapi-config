@@ -6,9 +6,9 @@ using Serilog;
 
 namespace Sample.Application.Teams.GetAll;
 
-public sealed class GetAllQueryHandler : GetAllQueryHandler<Guid, Domain.Team, DatabaseContext, Team, GetAllQuery>
+public sealed class GetAllTeamsQueryHandler : GetAllQueryHandler<Guid, Domain.Team, DatabaseContext, Team, GetAllTeamsQuery>
 {
-    public GetAllQueryHandler(IDbContextFactory<DatabaseContext> contextFactory, IMapper mapper, ILogger logger)
+    public GetAllTeamsQueryHandler(IDbContextFactory<DatabaseContext> contextFactory, IMapper mapper, ILogger logger)
         : base(contextFactory, mapper, logger)
     {
     }
