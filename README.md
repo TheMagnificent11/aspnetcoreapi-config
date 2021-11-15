@@ -6,7 +6,7 @@ Extension methods and Autofac modules to assist with configuration ASP.Net Core 
 
 ## Dependencies
 
-AspNetCoreApi.Infrastructure is a .Net Standard 2.1 class library that has the following dependencies.
+AspNetCoreApi.Infrastructure is a .Net 6 class library that has the following dependencies.
 
 This is not a full-dependency tree, but just the major dependencies listed.
 
